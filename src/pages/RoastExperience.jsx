@@ -75,6 +75,9 @@ const RoastExperience = () => {
         try {
           const intensitiesArr = ['gentle', 'medium', 'savage', 'destroy'];
           const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+          console.log(`[DEBUG] Attempting fetch to: ${apiUrl}/api/roast`);
+          console.log(`[DEBUG] Payload:`, { input, mode, intensity: intensitiesArr[intensity] });
+
           const response = await fetch(`${apiUrl}/api/roast`, {
             method: 'POST',
             headers: {
@@ -87,18 +90,22 @@ const RoastExperience = () => {
             }),
           });
 
+          console.log(`[DEBUG] Response status: ${response.status}`);
+
           if (!response.ok) {
             const errorData = await response.json();
+            console.error(`[DEBUG] API Error Response:`, errorData);
             const error = new Error(errorData.error || 'Roast failed');
             if (response.status === 429) error.code = 'functions/resource-exhausted';
             throw error;
           }
 
           const data = await response.json();
+          console.log(`[DEBUG] Roast received successfully:`, data);
           setResult(data);
           setState('result');
         } catch (error) {
-          console.error("Roast failed:", error);
+          console.error("[DEBUG] Roast Fetch Exception:", error);
           if (error.code === 'functions/resource-exhausted' || error.message.includes('limit')) {
             setErrorType('limit');
           } else {

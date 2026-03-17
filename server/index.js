@@ -19,18 +19,21 @@ const limiter = rateLimit({
 // Manual CORS Middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  // Temporarily allow all origins to debug, then we can lock it down
+  console.log(`[DEBUG] Incoming Request: ${req.method} ${req.url}`);
+  console.log(`[DEBUG] Origin: ${origin}`);
+  
   res.header('Access-Control-Allow-Origin', origin || '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
 
-  // Handle preflight
   if (req.method === 'OPTIONS') {
+    console.log('[DEBUG] Handled PREFLIGHT (OPTIONS)');
     return res.sendStatus(200);
   }
   next();
 });
+
 app.use(express.json());
 app.use('/api/', limiter);
 
@@ -38,13 +41,19 @@ app.use('/api/', limiter);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.post('/api/roast', async (req, res) => {
+  console.log('-------------------------------------------');
+  console.log(`[${new Date().toISOString()}] POST /api/roast`);
   const { input, mode, intensity } = req.body;
+  console.log(`[DEBUG] Metadata: mode=${mode}, intensity=${intensity}`);
+  console.log(`[DEBUG] Input Snippet: ${input?.substring(0, 50)}...`);
 
   if (!input) {
+    console.warn('[ERROR] Request received with no input!');
     return res.status(400).json({ error: 'Startup data is required.' });
   }
 
   try {
+    console.log('[DEBUG] Initializing gemini-1.5-pro model');
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
     const systemPrompt = `You are RoastBot 3000 — a brutally honest AI comedian who reviews 
@@ -81,21 +90,28 @@ Always be SPECIFIC to their actual idea. Never give generic advice.`;
 
     const prompt = `System Instructions: ${systemPrompt}\n\nUser Input: Roast this ${mode}: ${input}\nIntensity: ${intensity}`;
 
+    console.log('[DEBUG] Calling Google Generative AI...');
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const responseText = response.text();
+    console.log('[DEBUG] Received Generative AI Response');
     
     // Clean JSON from potential markdown markers
     const cleanedJson = responseText.replace(/`\`\`json|`\`\`/g, "").trim();
     const roastData = JSON.parse(cleanedJson);
 
+    console.log('[DEBUG] Successfully generated JSON roast. Sending response.');
     res.json(roastData);
   } catch (error) {
-    console.error('Error in /api/roast:', error);
-    res.status(500).json({ error: 'Failed to generate roast. Please try again later.' });
+    console.error('[CRITICAL] Error generating roast:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate roast.', 
+      message: error.message 
+    });
   }
 });
 
 app.listen(port, () => {
-  console.log(`💀 RoastBot Server running at http://localhost:${port}`);
+  console.log(`💀 RoastBot Server running on port ${port}`);
+  console.log(`[DEBUG] Environment: PORT=${process.env.PORT}, GEMINI_KEY_SET=${!!process.env.GEMINI_API_KEY}`);
 });
