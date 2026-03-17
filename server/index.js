@@ -16,12 +16,21 @@ const limiter = rateLimit({
   message: { error: 'You have reached your limit of 3 roasts for today. Even we have to pay the electric bill! 💀' }
 });
 
-// Middleware
-app.use(cors({
-  origin: ['https://roastmystartup-7c06e.web.app', 'http://localhost:5173'],
-  methods: ['POST'],
-  credentials: true
-}));
+// Manual CORS Middleware
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Temporarily allow all origins to debug, then we can lock it down
+  res.header('Access-Control-Allow-Origin', origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 app.use(express.json());
 app.use('/api/', limiter);
 
