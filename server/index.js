@@ -17,14 +17,13 @@ const limiter = rateLimit({
 });
 
 // Middleware
-app.use(cors()); // Allow all for now to bypass the preflight issue, then restrict
+app.use(cors({
+  origin: ['https://roastmystartup-7c06e.web.app', 'http://localhost:5173'],
+  methods: ['POST'],
+  credentials: true
+}));
 app.use(express.json());
 app.use('/api/', limiter);
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'alive', version: '1.1.0', time: new Date().toISOString() });
-});
 
 // OpenAI integration
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

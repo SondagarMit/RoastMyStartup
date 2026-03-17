@@ -67,6 +67,11 @@ const RoastExperience = () => {
   useEffect(() => {
     const fetchRoast = async () => {
       if (input && state === 'loading') {
+        // Clear the URL search params so the link is clean (no more ?input=...)
+        if (searchParams.get('input')) {
+          navigate('/roast', { replace: true });
+        }
+
         try {
           const intensitiesArr = ['gentle', 'medium', 'savage', 'destroy'];
           const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
