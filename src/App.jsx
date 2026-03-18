@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage'
 import RoastExperience from './pages/RoastExperience'
 import Pricing from './pages/Pricing'
 import Dashboard from './pages/Dashboard'
+import Examples from './pages/Examples'
 import { AuthProvider } from './context/AuthContext'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/roast" element={<RoastExperience />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/examples" element={<Examples />} />
           </Routes>
         </div>
       </Router>

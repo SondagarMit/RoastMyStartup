@@ -7,7 +7,7 @@ import html2canvas from 'html2canvas';
 const RoastExperience = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [state, setState] = useState('loading'); // 'input', 'loading', 'result', 'error'
+  const [state, setState] = useState(searchParams.get('input') ? 'loading' : 'input'); // 'input', 'loading', 'result', 'error'
   const [errorType, setErrorType] = useState(null); // 'limit', 'general'
   const [result, setResult] = useState(null);
   const [intensity, setIntensity] = useState(2); // 0: Gentle, 1: Medium, 2: Savage, 3: Destroy
@@ -219,7 +219,10 @@ const RoastExperience = () => {
                      step="1"
                      value={intensity}
                      onChange={(e) => setIntensity(parseInt(e.target.value))}
-                     className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
+                     className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                     style={{
+                       background: `linear-gradient(to right, var(--primary) ${(intensity / 3) * 100}%, rgba(255, 255, 255, 0.1) ${(intensity / 3) * 100}%)`
+                     }}
                    />
                 </div>
 

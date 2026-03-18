@@ -52,54 +52,73 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-bg py-24 px-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-bg relative flex flex-col items-center justify-center p-6 overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+      </div>
+
+      {/* Header */}
+      <div className="absolute top-0 w-full p-6 md:px-12 flex justify-between items-center z-20">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+          <Flame className="text-primary w-6 h-6 fill-primary" />
+          <span className="text-xl font-black font-syne tracking-tighter">RoastMyStartup</span>
+        </div>
+        <button 
+          onClick={() => navigate('/')}
+          className="bg-white/5 border border-border px-4 py-2 rounded-full text-xs font-bold hover:bg-white/10 transition-all"
+        >
+          Back to Home
+        </button>
+      </div>
+
+      <div className="max-w-7xl mx-auto w-full relative z-10 pt-20">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-black font-syne mb-6">Choose your level of pain</h1>
-          <p className="text-xl text-text-muted max-w-2xl mx-auto">All plans include our jaded AI comedian who has seen too many failed pitch decks.</p>
+          <h1 className="text-5xl md:text-7xl font-black font-syne mb-6 tracking-tighter">Premium Roasts</h1>
+          <p className="text-xl text-text-muted max-w-2xl mx-auto">Get exclusive features and unlimited destruction for your startup.</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {tiers.map((tier, idx) => (
-            <div 
-              key={idx} 
-              className={`bg-bg-card border ${tier.highlight ? 'border-primary ring-1 ring-primary shadow-2xl shadow-primary/20' : 'border-border'} p-8 rounded-[40px] flex flex-col relative overflow-hidden group`}
-            >
-              {tier.highlight && (
-                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-black px-4 py-1 rounded-bl-xl uppercase tracking-widest">
-                  POPULAR
-                </div>
-              )}
-              <div className="mb-8">
-                <h3 className="text-sm font-black text-text-muted uppercase tracking-[0.2em] mb-4">{tier.name}</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-black font-syne">{tier.price}</span>
-                  {tier.period && <span className="text-text-muted font-bold">{tier.period}</span>}
-                </div>
-                <p className="mt-4 text-text-muted text-sm">{tier.description}</p>
-              </div>
-
-              <div className="space-y-4 mb-12 flex-1">
-                {tier.features.map((feature, fidx) => (
-                  <div key={fidx} className="flex gap-3">
-                    <Check className={`w-5 h-5 ${tier.highlight ? 'text-primary' : 'text-success'} shrink-0`} />
-                    <span className="text-sm text-text-muted font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button 
-                className={`w-full py-4 rounded-2xl font-black text-lg transition-all ${tier.highlight ? 'bg-primary text-white hover:bg-red-600 shadow-xl shadow-primary/20' : 'bg-white/5 border border-border text-white hover:bg-white/10'}`}
+        {/* Pricing Content with Blur Overlay */}
+        <div className="relative">
+          <div className="grid md:grid-cols-3 gap-8 filter blur-lg opacity-40 pointer-events-none select-none">
+            {tiers.map((tier, idx) => (
+              <div 
+                key={idx} 
+                className={`bg-bg-card border ${tier.highlight ? 'border-primary shadow-2xl shadow-primary/20' : 'border-border'} p-8 rounded-[40px] flex flex-col relative overflow-hidden`}
               >
-                {tier.cta}
-              </button>
-            </div>
-          ))}
+                <div className="mb-8 font-black opacity-50">{tier.name}</div>
+                <div className="text-4xl font-black mb-4">{tier.price}</div>
+                <div className="space-y-4 mb-8">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="h-2 bg-white/10 rounded-full w-full"></div>
+                  ))}
+                </div>
+                <div className="mt-auto h-12 bg-white/5 rounded-2xl w-full"></div>
+              </div>
+            ))}
+          </div>
+
+          {/* Coming Soon Overlay */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center text-center p-6 bg-bg/20 backdrop-blur-md rounded-[50px] border border-white/5">
+             <div className="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center mb-8 rotate-12 shadow-2xl shadow-primary/20 border border-primary/30">
+                <Flame className="w-10 h-10 text-primary animate-pulse" />
+             </div>
+             <h2 className="text-4xl md:text-6xl font-black font-syne mb-4 tracking-tighter">COMING SOON <span className="text-primary">🔒</span></h2>
+             <p className="text-lg md:text-xl text-text-muted max-w-md mb-8 font-medium">
+               We're still calculating the cost of your electricity bill and psychological therapy for founders. 
+             </p>
+             <button 
+               onClick={() => navigate('/')}
+               className="bg-primary hover:bg-red-600 text-white font-black px-8 py-4 rounded-2xl text-lg transition-all shadow-xl shadow-primary/20 flex items-center gap-2 group"
+             >
+               GET ROASTED FOR FREE <span className="group-hover:translate-x-1 transition-transform">→</span>
+             </button>
+          </div>
         </div>
 
-        <div className="mt-20 text-center">
+        <div className="mt-20 text-center opacity-30">
             <p className="text-text-muted flex items-center justify-center gap-2">
-               Questions? Don't ask us. We'll just roast your question. <Flame className="w-4 h-4 text-primary" />
+               Future plans for future failed founders. <Flame className="w-4 h-4 text-primary" />
             </p>
         </div>
       </div>
