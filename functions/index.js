@@ -67,7 +67,7 @@ Always be SPECIFIC to their actual idea. Never give generic advice.
 If given a URL, roast the actual content, design choices, copy, 
 and positioning you can infer.`;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `System Instructions: ${systemPrompt}\n\nUser Input: Roast this ${mode}: ${input}\nIntensity: ${intensity}`;
     
     const result = await model.generateContent(prompt);

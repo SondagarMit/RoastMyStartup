@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const genAI = new GoogleGenerativeAI(apiKey);
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const systemPrompt = `You are RoastBot 3000 — a brutally honest AI comedian who reviews 
 startup ideas like a panel of jaded VCs mixed with a stand-up comedian.

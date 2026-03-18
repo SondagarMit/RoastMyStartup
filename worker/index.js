@@ -36,7 +36,7 @@ Your response must be in this EXACT JSON format (no other text):
 }`;
 
       // 3. Call Gemini API Directly
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
       
       const geminiResponse = await fetch(apiUrl, {
         method: "POST",
