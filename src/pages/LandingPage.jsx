@@ -291,9 +291,15 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="py-12 border-t border-border px-6 text-center">
         <div className="flex justify-center gap-6 mb-8 text-text-muted">
-          <Twitter className="w-5 h-5 hover:text-primary cursor-pointer" />
-          <Github className="w-5 h-5 hover:text-primary cursor-pointer" />
-          <Linkedin className="w-5 h-5 hover:text-primary cursor-pointer" />
+          <a href="https://x.com/MitSondagar" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            <Twitter className="w-5 h-5" />
+          </a>
+          <a href="https://github.com/SondagarMit/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            <Github className="w-5 h-5" />
+          </a>
+          <a href="https://www.linkedin.com/in/mit-sondagar/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+            <Linkedin className="w-5 h-5" />
+          </a>
         </div>
         <p className="text-text-muted mb-4 font-medium">
           Made by a developer who got roasted first 💀
@@ -301,7 +307,7 @@ const LandingPage = () => {
         <div className="flex justify-center gap-8 text-xs text-text-muted/60 uppercase tracking-widest font-bold">
           <a href="#" className="hover:text-white">Privacy</a>
           <a href="#" className="hover:text-white">Terms</a>
-          <a href="#" className="hover:text-white">Twitter</a>
+          <a href="https://x.com/MitSondagar" target="_blank" rel="noopener noreferrer" className="hover:text-white">Twitter</a>
         </div>
       </footer>
 
