@@ -3,12 +3,103 @@ import { useNavigate } from 'react-router-dom';
 import { Flame, ArrowRight, Twitter, Github, Linkedin, LogOut, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 const LandingPage = () => {
   const { user, login, logout } = useAuth();
   const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [mode, setMode] = useState('idea'); // 'idea' or 'url'
+  const [recentRoasts, setRecentRoasts] = useState([]);
+
+  useEffect(() => {
+    const fetchRecentRoasts = async () => {
+      try {
+        const q = query(
+          collection(db, "roasts"),
+          orderBy("createdAt", "desc"),
+          limit(10)
+        );
+        const querySnapshot = await getDocs(q);
+        const roasts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setRecentRoasts(roasts);
+      } catch (error) {
+        console.error("Error fetching recent roasts:", error);
+      }
+    };
+    fetchRecentRoasts();
+  }, []);
+
+  const defaultRoasts = [
+    { id: 'd1', startup_name: "Uber for chai", intensity: "destroyed", emoji: "💀", user_name: "Ahmed's" },
+    { id: 'd2', startup_name: "digital napkin", intensity: "roasted", emoji: "🔥", user_name: "Sarah's" },
+    { id: 'd3', startup_name: "fintech idea", intensity: "roasted in 3 languages", emoji: "⚰️", user_name: "Raj's" },
+    { id: 'd4', startup_name: "AI for cats", intensity: "shredded", emoji: "💀", user_name: "Maximillian's" },
+    { id: 'd5', startup_name: "SaaS for socks", intensity: "burned", emoji: "🔥", user_name: "Eleanor's" },
+    { id: 'd6', startup_name: "Crypto for kids", intensity: "eviscerated", emoji: "⚰️", user_name: "Bartholomew's" },
+
+    { id: 'd7', startup_name: "LinkedIn for dogs", intensity: "annihilated", emoji: "💀", user_name: "Lucas's" },
+    { id: 'd8', startup_name: "AI dating coach", intensity: "toasted", emoji: "🔥", user_name: "Priya's" },
+    { id: 'd9', startup_name: "Uber for barbers", intensity: "vaporized", emoji: "⚰️", user_name: "Arjun's" },
+    { id: 'd10', startup_name: "NFT for memes", intensity: "incinerated", emoji: "🔥", user_name: "Daniel's" },
+    { id: 'd11', startup_name: "SaaS for gym bros", intensity: "destroyed", emoji: "💀", user_name: "Kevin's" },
+    { id: 'd12', startup_name: "AI horoscope reader", intensity: "absolutely roasted", emoji: "🔥", user_name: "Nina's" },
+
+    { id: 'd13', startup_name: "Uber for laundry", intensity: "shredded", emoji: "⚰️", user_name: "Omar's" },
+    { id: 'd14', startup_name: "TikTok for pets", intensity: "burned alive", emoji: "🔥", user_name: "Sophia's" },
+    { id: 'd15', startup_name: "AI roommate finder", intensity: "obliterated", emoji: "💀", user_name: "Liam's" },
+    { id: 'd16', startup_name: "Crypto for gamers", intensity: "nuked", emoji: "⚰️", user_name: "Zara's" },
+    { id: 'd17', startup_name: "SaaS for coffee shops", intensity: "grilled", emoji: "🔥", user_name: "Noah's" },
+    { id: 'd18', startup_name: "AI for productivity", intensity: "evaporated", emoji: "💀", user_name: "Ava's" },
+
+    { id: 'd19', startup_name: "Uber for tutors", intensity: "demolished", emoji: "🔥", user_name: "Ibrahim's" },
+    { id: 'd20', startup_name: "VR meditation app", intensity: "roasted hard", emoji: "⚰️", user_name: "Emily's" },
+    { id: 'd21', startup_name: "AI for memes", intensity: "torched", emoji: "🔥", user_name: "Nathan's" },
+    { id: 'd22', startup_name: "LinkedIn for gamers", intensity: "slaughtered", emoji: "💀", user_name: "Isabella's" },
+    { id: 'd23', startup_name: "Uber for chefs", intensity: "fried", emoji: "🔥", user_name: "Carlos's" },
+    { id: 'd24', startup_name: "AI workout planner", intensity: "crushed", emoji: "⚰️", user_name: "Maya's" },
+
+    { id: 'd25', startup_name: "Crypto pizza club", intensity: "obliterated", emoji: "💀", user_name: "Victor's" },
+    { id: 'd26', startup_name: "SaaS for dentists", intensity: "incinerated", emoji: "🔥", user_name: "Grace's" },
+    { id: 'd27', startup_name: "AI sleep tracker", intensity: "destroyed", emoji: "⚰️", user_name: "Oliver's" },
+    { id: 'd28', startup_name: "Uber for mechanics", intensity: "barbecued", emoji: "🔥", user_name: "Fatima's" },
+    { id: 'd29', startup_name: "NFT for selfies", intensity: "wrecked", emoji: "💀", user_name: "Leo's" },
+    { id: 'd30', startup_name: "AI travel buddy", intensity: "toasted badly", emoji: "⚰️", user_name: "Hannah's" },
+
+    { id: 'd31', startup_name: "LinkedIn for students", intensity: "demolished", emoji: "🔥", user_name: "Yusuf's" },
+    { id: 'd32', startup_name: "Uber for photographers", intensity: "obliterated", emoji: "💀", user_name: "Aiden's" },
+    { id: 'd33', startup_name: "AI recipe generator", intensity: "grilled", emoji: "🔥", user_name: "Chloe's" },
+    { id: 'd34', startup_name: "Crypto savings app", intensity: "nuked", emoji: "⚰️", user_name: "Adrian's" },
+    { id: 'd35', startup_name: "SaaS for salons", intensity: "shredded", emoji: "💀", user_name: "Layla's" },
+    { id: 'd36', startup_name: "AI study assistant", intensity: "burned", emoji: "🔥", user_name: "Marcus's" },
+
+    { id: 'd37', startup_name: "Uber for movers", intensity: "obliterated", emoji: "⚰️", user_name: "Nora's" },
+    { id: 'd38', startup_name: "NFT music platform", intensity: "torched", emoji: "🔥", user_name: "Sebastian's" },
+    { id: 'd39', startup_name: "AI for job hunting", intensity: "destroyed", emoji: "💀", user_name: "Aisha's" },
+    { id: 'd40', startup_name: "Crypto for students", intensity: "roasted hard", emoji: "⚰️", user_name: "Ethan's" },
+    { id: 'd41', startup_name: "SaaS for landlords", intensity: "incinerated", emoji: "🔥", user_name: "Amelia's" },
+    { id: 'd42', startup_name: "AI podcast editor", intensity: "crushed", emoji: "💀", user_name: "Logan's" },
+
+    { id: 'd43', startup_name: "Uber for gardeners", intensity: "barbecued", emoji: "🔥", user_name: "Sofia's" },
+    { id: 'd44', startup_name: "NFT art marketplace", intensity: "slaughtered", emoji: "⚰️", user_name: "Ravi's" },
+    { id: 'd45', startup_name: "AI fashion stylist", intensity: "obliterated", emoji: "💀", user_name: "Mila's" },
+    { id: 'd46', startup_name: "Crypto budgeting app", intensity: "demolished", emoji: "🔥", user_name: "Aaron's" },
+    { id: 'd47', startup_name: "SaaS for tutors", intensity: "burned alive", emoji: "⚰️", user_name: "Neha's" },
+    { id: 'd48', startup_name: "AI email writer", intensity: "annihilated", emoji: "💀", user_name: "Jacob's" },
+
+    { id: 'd49', startup_name: "Uber for painters", intensity: "fried", emoji: "🔥", user_name: "Sanjay's" },
+    { id: 'd50', startup_name: "AI meme generator", intensity: "absolutely destroyed", emoji: "⚰️", user_name: "Olivia's" }
+  ];
+
+  // Combine recent roasts with default roasts to ensure the marquee is always full
+  // This prevents the marquee from being too fast/slow and looking broken based on data count
+  const displayRoasts = recentRoasts.length > 0 
+    ? [...recentRoasts, ...defaultRoasts].slice(0, 50) 
+    : defaultRoasts;
 
   const handleRoast = (e) => {
     e.preventDefault();
@@ -40,7 +131,7 @@ const LandingPage = () => {
                 <User className="w-4 h-4" />
                 <span>{user.displayName?.split(' ')[0]}</span>
               </button>
-              <button 
+              <button
                 onClick={logout}
                 className="p-2 hover:bg-white/10 rounded-full transition-all text-text-muted hover:text-primary"
               >
@@ -48,7 +139,7 @@ const LandingPage = () => {
               </button>
             </div>
           ) : (
-            <button 
+            <button
               onClick={login}
               className="px-5 py-2 border border-border rounded-full hover:bg-white hover:text-black transition-all"
             >
@@ -60,7 +151,7 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 max-w-7xl mx-auto text-center">
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-5xl md:text-7xl font-black font-syne leading-[1.1] mb-6"
@@ -68,8 +159,8 @@ const LandingPage = () => {
           Your startup idea<br />
           <span className="text-primary">deserves the truth. 💀</span>
         </motion.h1>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -78,7 +169,7 @@ const LandingPage = () => {
           Get brutally honest AI feedback disguised as a comedy roast. Your feelings will not be spared.
         </motion.p>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -88,14 +179,14 @@ const LandingPage = () => {
             <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-2xl blur opacity-25 group-focus-within:opacity-50 transition duration-1000 group-focus-within:duration-200"></div>
             <div className="relative bg-bg-card border border-border rounded-2xl p-2 flex flex-col items-center">
               <div className="w-full flex p-2 gap-2 border-b border-border/50 mb-2">
-                <button 
+                <button
                   type="button"
                   onClick={() => setMode('idea')}
                   className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${mode === 'idea' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-muted hover:text-white'}`}
                 >
                   💡 Idea
                 </button>
-                <button 
+                <button
                   type="button"
                   onClick={() => setMode('url')}
                   className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${mode === 'url' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-muted hover:text-white'}`}
@@ -103,13 +194,13 @@ const LandingPage = () => {
                   🌐 Website URL
                 </button>
               </div>
-              <input 
+              <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={mode === 'idea' ? "Describe your startup in one sentence..." : "https://yourstartup.com"}
                 className="w-full bg-transparent border-none focus:ring-0 text-lg p-4 placeholder:text-text-muted/50"
               />
-              <button 
+              <button
                 type="submit"
                 className="w-full mt-2 bg-primary hover:bg-red-600 text-white font-black py-4 rounded-xl text-xl flex items-center justify-center gap-2 group roast-button"
               >
@@ -125,13 +216,13 @@ const LandingPage = () => {
 
       {/* Social Proof Ticker */}
       <div className="w-full bg-bg-card/50 border-y border-border py-4 overflow-hidden relative">
-        <div className="flex gap-12 animate-scroll whitespace-nowrap text-text-muted font-medium py-2">
-          {[1,2,3,4,5].map((i) => (
-            <React.Fragment key={i}>
-              <span className="flex items-center gap-2">💀 <span className="text-white">Ahmed's</span> "Uber for chai" idea got destroyed</span>
-              <span className="flex items-center gap-2">🔥 <span className="text-white">Sarah's</span> landing page was called a "digital napkin"</span>
-              <span className="flex items-center gap-2">⚰️ <span className="text-white">Raj's</span> fintech idea was roasted in 3 languages</span>
-            </React.Fragment>
+        <div className="flex gap-12 animate-scroll whitespace-nowrap text-text-muted font-medium py-2 w-max">
+          {[...displayRoasts, ...displayRoasts, ...displayRoasts, ...displayRoasts].map((roast, i) => (
+            <span key={`${roast.id}-${i}`} className="flex items-center gap-2">
+              {roast.emoji || (roast.scores?.survivability < 3 ? '💀' : '🔥')}
+              <span className="text-white">{roast.user_name || "A founder's"}</span>
+              "{roast.startup_name || roast.input || "startup"}" {roast.intensity?.includes('roasted') ? roast.intensity : (roast.intensity === 'savage' || roast.intensity === 'destroy' ? 'was destroyed' : 'was roasted')}
+            </span>
           ))}
         </div>
       </div>
@@ -171,7 +262,7 @@ const LandingPage = () => {
               <div className="relative">
                 <span className="absolute -top-6 -left-4 text-6xl text-primary opacity-20 font-serif">"</span>
                 <p className="text-xl md:text-2xl font-medium leading-relaxed italic z-10 relative">
-                  Setting up a "marketplace for artisanal ice cubes" is less of a startup and more of a cryogenic suicide note. 
+                  Setting up a "marketplace for artisanal ice cubes" is less of a startup and more of a cryogenic suicide note.
                   Have you tried just lighting your investors' money on fire? It's faster and smells better.
                 </p>
               </div>
@@ -181,17 +272,17 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="w-full md:w-64 bg-bg rounded-2xl p-6 border border-border shadow-2xl skew-y-1 hover:skew-y-0 transition-transform">
-               <div className="flex items-center justify-between mb-4">
-                  <Flame className="w-4 h-4 text-primary" />
-                  <span className="text-[10px] text-text-muted uppercase tracking-tighter">RoastMyStartup.com</span>
-               </div>
-               <div className="h-20 bg-primary/20 rounded-lg mb-4 flex items-center justify-center text-4xl">⚰️</div>
-               <div className="space-y-2">
-                 <div className="h-2 bg-white/20 rounded-full w-full"></div>
-                 <div className="h-2 bg-white/20 rounded-full w-3/4"></div>
-                 <div className="h-2 bg-primary/40 rounded-full w-1/2"></div>
-               </div>
-               <button className="w-full mt-6 bg-primary text-[10px] font-black py-2 rounded-lg">TRY IT YOURSELF</button>
+              <div className="flex items-center justify-between mb-4">
+                <Flame className="w-4 h-4 text-primary" />
+                <span className="text-[10px] text-text-muted uppercase tracking-tighter">RoastMyStartup.com</span>
+              </div>
+              <div className="h-20 bg-primary/20 rounded-lg mb-4 flex items-center justify-center text-4xl">⚰️</div>
+              <div className="space-y-2">
+                <div className="h-2 bg-white/20 rounded-full w-full"></div>
+                <div className="h-2 bg-white/20 rounded-full w-3/4"></div>
+                <div className="h-2 bg-primary/40 rounded-full w-1/2"></div>
+              </div>
+              <button className="w-full mt-6 bg-primary text-[10px] font-black py-2 rounded-lg">TRY IT YOURSELF</button>
             </div>
           </div>
         </div>
@@ -213,14 +304,15 @@ const LandingPage = () => {
           <a href="#" className="hover:text-white">Twitter</a>
         </div>
       </footer>
-      
-      <style dangerouslySetInnerHTML={{ __html: `
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes scroll {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
+          100% { transform: translateX(-50%); }
         }
         .animate-scroll {
-          animation: scroll 40s linear infinite;
+          animation: scroll 600s linear infinite;
         }
         .animate-scroll:hover {
           animation-play-state: paused;
