@@ -55,7 +55,7 @@ app.post('/api/roast', async (req, res) => {
 
   try {
     console.log('[DEBUG] Initializing gemini-1.5-flash model');
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
     const systemPrompt = `You are RoastBot 3000 — a brutally honest AI comedian who reviews 
 startup ideas like a panel of jaded VCs mixed with a stand-up comedian.
